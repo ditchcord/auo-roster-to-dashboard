@@ -1,6 +1,6 @@
 --Copyright notice does not apply to 'cmu_cpcs_utils.py'--
 
-Copyright (c) 2025 Jason H. Wells
+Copyright (c) 2026 J Wells
 
 MOST RIGHTS RESERVED - DISTRIBUTION PROHIBITED
 

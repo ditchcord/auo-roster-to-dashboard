@@ -1,34 +1,23 @@
-# auo-dues-compiler
+# auo-roster-to-dashboard
 
-### Takes in dues spreadsheet and cashnet record and complies dues record
+### Compile names in roster to a list of names and pieces they are playing in 
 
-## What is this
-- Some people don't send receipt number when they pay on cashnet
-- But SLICE cashnet record at least records the names of people who paid
-- This program shows you every person who has a cashnet record but no recorded receipt number.
-
-## Additional features
-- Immediately see who hasn't paid dues yet
-- See if someone paid their dues multiple times
-- If transactions from spring semester exist, automatically ignore cashnet data from fall semester
-
-## Obtaining "Dues Tracker"
-1. Copy the 3 columns of the Dues Tracker google sheet and paste it into a .txt (DO NOT format as CSV)
-2. Call this duestracker-f23.txt or whatever the semester is
-
-## Obtaining "Cashnet Record"
-1. Email Student Involvement and Traditions Finance requesting a cashnet record for AUO in PDF format (NOT excel/csv format)
-2. Open PDF in chrome or firefox browser and highlight all using command/control+A (DO NOT copy from mac preview pdf viewer)
-3. Copy and paste into a .txt - make sure you can see one transaction per line each starting with the date
-4. Call this cashnet-f23.txt or whatever the semester is
+## Obtaining roster data
+1. Open symphony roster and control/command+A to highlight everything, then copy it
+2. Paste it into an empty .txt file and save it as **symphony.txt**
+3. Open chamber orchestra roster and control/command+A to highlight everything, then copy it
+4. Paste it into an empty .txt file and save it as **chamber.txt**
+5. Write the names of every board member in list format in an empty .txt file and save it as **board.txt**
 
 ## Quick start
 1. Install Python 3.10 or newer
 2. Clone this repository to your device
-3. Move/copy your duestracker-xxx.txt and cashnet-xxx.txt to the **private** folder (so that git pushes won't expose ppl's data)
+3. Create a folder called **private** in the repo and move/copy your symphony.txt and chamber.txt and board.txt to that folder (so that git pushes won't expose ppl's data)
 4. Open main.py
-5. Type the file name of your dues tracker and cashnet record when prompted
-6. See merged data in the console output
+5. Type the file name of your symphony and chamber rosters and board when prompted
+6. Output files will be in a folder titled the current time
+7. **names.txt** can be pasted into the first column of the dashboard spreadsheet
+8. **pieces.csv** can be pasted in the 
 
 ## Troubleshooting
 After parsing Cashnet Record - if extra words are appended to people's names, 
@@ -43,7 +32,7 @@ Email wellsjason543 at gmail dot com for issues or questions
 
 --Copyright notice does not apply to 'cmu_cpcs_utils.py'--
 
-Copyright (c) 2025 Jason H. Wells
+Copyright (c) 2026 J Wells
 
 MOST RIGHTS RESERVED - DISTRIBUTION PROHIBITED
 
