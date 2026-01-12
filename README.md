@@ -12,7 +12,7 @@
 ## Quick start
 1. Install Python 3.10 or newer
 2. Clone this repository to your device
-3. Create a folder called **private** in the repo and move/copy your symphony.txt and chamber.txt and board.txt to that folder (so that git pushes won't expose ppl's data)
+3. Create a folder called **private** in the repo and move/copy your **symphony.txt** and **chamber.txt** and **board.txt** to that folder (so that git pushes won't expose ppl's data)
 4. Open main.py
 5. Type the file name of your symphony and chamber rosters and board when prompted
 6. Output files will be in a folder titled the current time
