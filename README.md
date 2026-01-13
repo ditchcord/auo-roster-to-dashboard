@@ -16,12 +16,13 @@
 4. Open main.py
 5. Type the file name of your symphony and chamber rosters and board when prompted
 6. Output files will be in a folder titled the current time
-7. **names.txt** can be pasted into the first column of the dashboard spreadsheet
-8. **pieces.csv** can be pasted in the 
+7. **names.txt** can be pasted into the first column "Name" header of the dashboard spreadsheet
+8. Google sheet: Data --> Split text into columns --> separator: comma
+9. **pieces.csv** can be pasted in the first column header where the name of the first piece would go
+10. Google sheet: Data --> Split text into columns --> separator: comma
 
 ## Troubleshooting
-After parsing Cashnet Record - if extra words are appended to people's names, 
-or dues appearing in non dues payments, add those words to Tokens.tokens in main.py.
+If there are errors, the anchors are probably being detected wrongly due to the roster having a different format than the one this program was written for. You can try to fix it yourself in the **addChamberMembers()** and **addSymphonyMembers()** functions or email me.
 
 Email wellsjason543 at gmail dot com for issues or questions
 
