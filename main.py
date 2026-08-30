@@ -43,16 +43,19 @@ def addSymphonyMembers(members: list[Member], symphony2dList: list[list[str]], p
     evenIndexes = conductorCells[::2]
     oddIndexes = conductorCells[1::2] 
     conductorCells = evenIndexes + oddIndexes
+    conductorCells.append(None) # buffer for loop condition
                 
     # for each "conductor" cell
-    for conductorCellIndex in range(0,len(conductorCells)):
+    for conductorCellIndex in range(0,len(conductorCells)-1):
         piece: str = symphony2dList[conductorCells[conductorCellIndex][0]-1][conductorCells[conductorCellIndex][1]]
         pieces.append(piece)
         currentNameCell: list[int] = [conductorCells[conductorCellIndex][0], conductorCells[conductorCellIndex][1]+2]
-        while True: # while not yet 3 consecutive empty rows
-            if (symphony2dList[currentNameCell[0]][currentNameCell[1]] == '' and
-                symphony2dList[currentNameCell[0]+1][currentNameCell[1]] == '' and
-                symphony2dList[currentNameCell[0]+2][currentNameCell[1]] == ''):
+        while True: # while not yet reached 4 empty rows OR next conductor row
+            if ((symphony2dList[currentNameCell[0]][currentNameCell[1]] == '' and
+                 symphony2dList[currentNameCell[0]+1][currentNameCell[1]] == '' and
+                 symphony2dList[currentNameCell[0]+2][currentNameCell[1]] == '' and
+                 symphony2dList[currentNameCell[0]+3][currentNameCell[1]] == '') or 
+                 (currentNameCell[0], currentNameCell[1]-2) == conductorCells[conductorCellIndex+1]):
                 break
             
             # get instrument pertaining to the currentNameCell
@@ -66,26 +69,32 @@ def addSymphonyMembers(members: list[Member], symphony2dList: list[list[str]], p
             if endIndex != -1: instrument = instrument[:endIndex] # strip at " =" if applicable
             if instrument[0] in '0123456789': instrument = instrument[2:] # remove leading numbers and a space (eg. in "3 percussion")
 
-            # get and filter member name
+            # get member name
             name: str = symphony2dList[currentNameCell[0]][currentNameCell[1]]
-            endIndex = max(name.find(','), name.find(' ('), name.find(' ['))
-            if endIndex != -1: name = name[:endIndex] # strip stuff after end of name
 
             # skip names that start with these words
+            skip = False
             namesToSkip = ['vacant', 'guest', 'tbd']
             for nameToSkip in namesToSkip:
                 if name.lower().startswith(nameToSkip):
-                    currentNameCell[0] += 1 # go to next row
-                    continue
+                    skip = True
+                    break
+            if skip:
+                currentNameCell[0] += 1 # go to next row 
+                continue
 
             # skip names that are empty or '--'
             if name == '' or name == '--':
                 currentNameCell[0] += 1 # go to next row
                 continue
 
-            # deal with "same roster as above" names,
+            # filter member name
+            endIndex = max(name.find(','), name.find(' ('), name.find(' ['))
+            if endIndex != -1: name = name[:endIndex] # strip stuff after end of name
+
+            # deal with 'same roster as above' names,
             # does NOT consider exceptions eg. "same roster as above (minus a, b and c)"
-            if name.startswith("same roster as above"):
+            if name.startswith('same '):
                 # get name of previous piece
                 abovePiece: str = symphony2dList[conductorCells[conductorCellIndex-1][0]-1][conductorCells[conductorCellIndex-1][1]]
                 # add every member on that instrument from previous piece to this piece
@@ -98,15 +107,17 @@ def addSymphonyMembers(members: list[Member], symphony2dList: list[list[str]], p
             
             # add name to members
             createNewEntry = True
-            for memberIndex in range(0,len(members)):
-                if members[memberIndex].name == name:
+            for member in members:
+                if member.name == name:
                     createNewEntry = False
                     # add piece playing to existing member
-                    members[memberIndex].addPiece(piece, instrument)
+                    member.addPiece(piece, instrument)
+                    break
             if createNewEntry:
                 # create new member and add piece playing
                 members.append(Member(name))
                 members[-1].addPiece(piece, instrument)
+
             
             currentNameCell[0] += 1 # go to next row
 
@@ -156,11 +167,14 @@ def addChamberMembers(members: list[Member], chamber2dList: list[list[str]], pie
             if endIndex != -1: name = name[:endIndex] # strip stuff after end of name
 
             # skip names that start with these words
+            skip = False
             namesToSkip = ['vacant', 'guest', 'tbd']
             for nameToSkip in namesToSkip:
                 if name.lower().startswith(nameToSkip):
-                    currentNameCell[0] += 1 # go to next row
-                    continue
+                    skip = True; break
+            if skip:
+                currentNameCell[0] += 1 # go to next row 
+                continue
 
             # skip names that are empty or '--'
             if name == '' or name == '--':
@@ -208,11 +222,14 @@ def addChamberMembers(members: list[Member], chamber2dList: list[list[str]], pie
         if endIndex != -1: name = name[:endIndex] # strip stuff after end of name
 
         # skip names that start with these words
+        skip = False
         namesToSkip = ['vacant', 'guest', 'tbd']
         for nameToSkip in namesToSkip:
             if name.lower().startswith(nameToSkip):
-                currentNameCell[0] += 1 # go to next row
-                continue
+                skip = True; break
+        if skip:
+            currentNameCell[0] += 1 # go to next row 
+            continue
 
         # skip names that are empty or '--'
         if name == '' or name == '--':
@@ -262,12 +279,6 @@ def getFilename(prompt: str) -> str:
         
         return filename
 
-def createFolderInPrivate() -> str:
-    dateTimeNow = datetime.today().strftime('%Y-%m-%d_%H;%M;%S')
-    path = f'private/{dateTimeNow}'
-    os.makedirs(path)
-    return path
-
 def main():
     members: list[Member] = []
     pieces: list[str] = []
@@ -284,21 +295,19 @@ def main():
         chamber2dList: list[list[str]] = list(csv.reader(file, delimiter='\t'))
     addChamberMembers(members, chamber2dList, pieces)
 
-    folderPath = createFolderInPrivate()
-
-    # export dashboard .txt (.csv format)
-    filename = 'dashboard.txt'
+    # export dashboard.txt (in .csv format)
+    dateTimeNow = datetime.today().strftime('%Y-%m-%d_%H;%M;%S')
+    filename = f'private/dashboard_{dateTimeNow}.txt'
     memberNames: list = [member.name for member in members] 
     pieces2dList: list[list[str]] = createPieces2dList(members, pieces)
     dashboardCSV: list[list[str]] = [['Name'] + [piece for piece in pieces]] # header
-    print(dashboardCSV)
 
     index = 0
     for name in memberNames:
         dashboardCSV.append([name] + pieces2dList[index])
         index += 1
 
-    with open(f'{folderPath}/{filename}', 'w') as file:
+    with open(filename, 'w') as file:
         csvWriter = csv.writer(file,delimiter=',')
         csvWriter.writerows(dashboardCSV)
 
