@@ -295,7 +295,10 @@ def main():
         chamber2dList: list[list[str]] = list(csv.reader(file, delimiter='\t'))
     addChamberMembers(members, chamber2dList, pieces)
 
-    # export dashboard.txt (in .csv format)
+    # alphabetize the member list 
+    members.sort(key=lambda x: x.name)
+
+    # export dashboard.txt (in csv format)
     dateTimeNow = datetime.today().strftime('%Y-%m-%d_%H;%M;%S')
     filename = f'private/dashboard_{dateTimeNow}.txt'
     memberNames: list = [member.name for member in members] 
