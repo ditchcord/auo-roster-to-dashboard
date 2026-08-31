@@ -7,19 +7,16 @@
 2. Paste it into an empty .txt file and save it as **symphony.txt**
 3. Open chamber orchestra roster and control/command+A to highlight everything, then copy it
 4. Paste it into an empty .txt file and save it as **chamber.txt**
-5. Write the names of every board member in list format in an empty .txt file and save it as **board.txt**
 
 ## Quick start
 1. Install Python 3.10 or newer
 2. Clone this repository to your device
-3. Create a folder called **private** in the repo and move/copy your **symphony.txt** and **chamber.txt** and **board.txt** to that folder (so that git pushes won't expose ppl's data)
+3. Create a folder called **private** in the repo and move/copy your **symphony.txt** and **chamber.txt** to that folder (so that git pushes won't expose ppl's data)
 4. Open main.py
-5. Type the file name of your symphony and chamber rosters and board when prompted
-6. Output files will be in a folder titled the current time
-7. **names.txt** can be pasted into the first column "Name" header of the dashboard spreadsheet
+5. Type the file name of your symphony and chamber rosters when prompted
+6. Output file **dashboard.txt** (using csv format) will be in the private folder titled the current time
+7. Copy the entire file and paste into the first column "Name" header of the dashboard spreadsheet
 8. Google sheet: Data --> Split text into columns --> separator: comma
-9. **pieces.csv** can be pasted in the first column header where the name of the first piece would go
-10. Google sheet: Data --> Split text into columns --> separator: comma
 
 ## Troubleshooting
 If there are errors, the anchors are probably being detected wrongly due to the roster having a different format than the one this program was written for. You can try to fix it yourself in the **addChamberMembers()** and **addSymphonyMembers()** functions or email me.
